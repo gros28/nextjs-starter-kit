@@ -15,6 +15,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { validateLoginForm } from '@/lib/login-validation'
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -29,20 +30,7 @@ export function LoginForm() {
   })
 
   const validateForm = () => {
-    const newErrors = { email: '', password: '' }
-
-    if (!formData.email) {
-      newErrors.email = '이메일을 입력해 주세요.'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = '올바른 이메일 주소를 입력해 주세요.'
-    }
-
-    if (!formData.password) {
-      newErrors.password = '비밀번호를 입력해 주세요.'
-    } else if (formData.password.length < 8) {
-      newErrors.password = '비밀번호는 최소 8자 이상이어야 합니다.'
-    }
-
+    const newErrors = validateLoginForm(formData.email, formData.password)
     setErrors(newErrors)
     return !newErrors.email && !newErrors.password
   }
@@ -82,9 +70,13 @@ export function LoginForm() {
               value={formData.email}
               onChange={e => handleInputChange('email', e.target.value)}
               className={errors.email ? 'border-red-500' : ''}
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? 'email-error' : undefined}
             />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
+              <p id="email-error" className="text-sm text-red-500">
+                {errors.email}
+              </p>
             )}
           </div>
 
@@ -98,6 +90,10 @@ export function LoginForm() {
                 value={formData.password}
                 onChange={e => handleInputChange('password', e.target.value)}
                 className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={
+                  errors.password ? 'password-error' : undefined
+                }
               />
               <Button
                 type="button"
@@ -114,7 +110,9 @@ export function LoginForm() {
               </Button>
             </div>
             {errors.password && (
-              <p className="text-sm text-red-500">{errors.password}</p>
+              <p id="password-error" className="text-sm text-red-500">
+                {errors.password}
+              </p>
             )}
           </div>
 

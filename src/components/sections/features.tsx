@@ -23,7 +23,7 @@ const features = [
     icon: Zap,
     title: '빠른 성능',
     description:
-      'Next.js 15의 최적화된 빌드로 빠른 로딩 속도와 뛰어난 사용자 경험을 제공합니다.',
+      'Turbopack이 개발과 production build의 기본 번들러로 설정되어 있습니다.',
   },
   {
     icon: Shield,
@@ -63,15 +63,15 @@ const features = [
   },
   {
     icon: Users,
-    title: '프로덕션 준비',
+    title: '프로젝트 시작점',
     description:
-      '실제 서비스 운영에 필요한 모든 설정과 보안 기능이 포함되어 있습니다.',
+      '레이아웃, 랜딩 섹션, 폼 UI 예제를 바탕으로 필요한 화면을 확장할 수 있습니다.',
   },
   {
     icon: Database,
     title: '상태 관리',
     description:
-      '검증된 라이브러리들을 활용한 효율적인 상태 관리 솔루션을 제공합니다.',
+      'React와 UI 라이브러리를 사용해 화면 상태와 입력을 구성할 수 있습니다.',
   },
 ]
 
