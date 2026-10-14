@@ -32,7 +32,7 @@ test('login validation rejects malformed emails and weak passwords', () => {
 test('jsdom forms cover valid/error submission, credential silence and checkbox clicks', async t => {
   const logging = (
     ['log', 'info', 'debug', 'warn', 'error', 'dir', 'table', 'trace'] as const
-  ).map(name => t.mock.method(console, name, () => {}))
+  ).map(name => t.mock.method(console, name))
   const dom = new JSDOM(
     '<!doctype html><html><body><div id="root"></div></body></html>',
     {
@@ -169,7 +169,17 @@ test('jsdom forms cover valid/error submission, credential silence and checkbox 
     )
     for (const logger of logging) {
       for (const call of logger.mock.calls) {
-        const payload = JSON.stringify(call.arguments)
+        const payload = JSON.stringify(call.arguments, (_key, value) => {
+          if (
+            value &&
+            typeof value === 'object' &&
+            !Array.isArray(value) &&
+            typeof value[Symbol.iterator] === 'function'
+          ) {
+            return Array.from(value)
+          }
+          return value
+        })
         assert.equal(
           payload.includes('12345678') || payload.includes('password123'),
           false
