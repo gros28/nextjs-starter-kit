@@ -26,7 +26,7 @@ npm run build
 npm start -- --hostname 127.0.0.1 --port 3000
 ```
 
-`check-all` runs TypeScript, ESLint, Prettier, and every `tests/**/*.test.{ts,tsx}` file. Bind the production server to loopback for local smoke checks. The jsdom tests use CSR `createRoot` and dispatched submit events with native validity asserted separately. They check login validator branches, rendered checkbox clicks and synthetic passwords absent from the tested console methods during login/signup submit. They do not prove SSR hydration, arbitrary credential exfiltration prevention or real-browser E2E behavior.
+`check-all` runs TypeScript, ESLint, Prettier, and every `tests/**/*.test.{ts,tsx}` file. Bind the production server to loopback for local smoke checks. The jsdom tests use CSR `createRoot` and dispatched submit events with native validity asserted separately. They check login validator branches, rendered checkbox clicks and synthetic password markers in JSON-serializable or iterable arguments of the tested console methods during login/signup submit. Non-enumerable/custom-formatted objects, later asynchronous logging, SSR hydration, arbitrary credential exfiltration prevention and real-browser E2E are not proved.
 
 `format` and `format:check` cover application source, tests, and the listed root project files. Guide Markdown is excluded because its fenced snippets are illustrative source and Prettier can change their meaning (for example, converting a `'use server'` directive into a parenthesized expression). Hidden tool directories such as `.claude` and `.vscode`, including local tool settings, are also outside this formatter scope. `lint-staged` uses the same source, test, and root-file groups.
 

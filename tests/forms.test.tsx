@@ -29,7 +29,7 @@ test('login validation rejects malformed emails and weak passwords', () => {
   )
 })
 
-test('jsdom forms cover valid/error submission, credential silence and checkbox clicks', async t => {
+test('jsdom forms cover validator branches, console markers and checkbox clicks', async t => {
   const logging = (
     ['log', 'info', 'debug', 'warn', 'error', 'dir', 'table', 'trace'] as const
   ).map(name => t.mock.method(console, name))
