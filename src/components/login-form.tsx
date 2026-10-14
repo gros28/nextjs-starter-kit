@@ -101,6 +101,8 @@ export function LoginForm() {
                 variant="ghost"
                 size="icon"
                 className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 표시'}
+                aria-pressed={showPassword}
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (

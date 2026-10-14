@@ -13,10 +13,11 @@
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\" \"tests/**/*.{js,jsx,ts,tsx}\" package.json README.md CLAUDE.md .prettierrc components.json \"tsconfig*.json\" next.config.ts eslint.config.mjs postcss.config.mjs",
-    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css}\" \"tests/**/*.{js,jsx,ts,tsx}\" package.json README.md CLAUDE.md .prettierrc components.json \"tsconfig*.json\" next.config.ts eslint.config.mjs postcss.config.mjs",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\" \"tests/**/*.{js,jsx,ts,tsx}\" \"e2e/**/*.ts\" package.json README.md CLAUDE.md .prettierrc components.json playwright.config.ts \"tsconfig*.json\" next.config.ts eslint.config.mjs postcss.config.mjs",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css}\" \"tests/**/*.{js,jsx,ts,tsx}\" \"e2e/**/*.ts\" package.json README.md CLAUDE.md .prettierrc components.json playwright.config.ts \"tsconfig*.json\" next.config.ts eslint.config.mjs postcss.config.mjs",
     "typecheck": "tsc --noEmit",
     "test": "tsx --tsconfig tsconfig.test.json --test \"tests/**/*.test.{ts,tsx}\"",
+    "test:e2e": "playwright test",
     "check-all": "npm run typecheck && npm run lint && npm run format:check && npm test",
     "prepare": "husky"
   },
@@ -51,6 +52,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/jsdom": "21.1.7",
+    "@playwright/test": "1.64.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.4.0",
     "eslint-config-prettier": "^10.1.8",
@@ -74,6 +76,10 @@
       "eslint --fix",
       "prettier --write"
     ],
+    "e2e/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
     "README.md": [
       "prettier --write"
     ],
@@ -87,6 +93,10 @@
       "prettier --write"
     ],
     "components.json": [
+      "prettier --write"
+    ],
+    "playwright.config.ts": [
+      "eslint --fix",
       "prettier --write"
     ],
     "tsconfig*.json": [
