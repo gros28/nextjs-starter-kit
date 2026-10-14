@@ -19,9 +19,17 @@ export function SignupForm() {
     <Card>
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">회원가입</CardTitle>
-        <CardDescription>새 계정을 만들어 서비스를 시작하세요</CardDescription>
+        <CardDescription>
+          화면 예시이며 실제 가입 기능과 비밀번호 확인 일치 검사는 포함되어 있지
+          않습니다.
+        </CardDescription>
       </CardHeader>
-      <form onSubmit={event => event.preventDefault()}>
+      <form
+        onSubmit={event => {
+          event.preventDefault()
+          // 예시 폼이며 실제 계정 생성 기능은 포함되어 있지 않습니다.
+        }}
+      >
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">이름</Label>
@@ -45,7 +53,7 @@ export function SignupForm() {
             <Input id="confirmPassword" type="password" required />
           </div>
           <div className="flex items-start space-x-2">
-            <Checkbox id="terms" />
+            <Checkbox id="terms" required />
             <div className="grid gap-1.5 leading-none">
               <label
                 htmlFor="terms"

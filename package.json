@@ -2,19 +2,21 @@
   "name": "nextjs-starter-kit",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@11.6.2",
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=24.11.1 <25",
+    "npm": ">=11.6.2 <12"
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"tests/**/*.tsx\" docs/guides/nextjs-16.md package.json README.md CLAUDE.md components.json tsconfig.json tsconfig.test.json next.config.ts eslint.config.mjs postcss.config.mjs",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.tsx\" docs/guides/nextjs-16.md package.json README.md CLAUDE.md components.json tsconfig.json tsconfig.test.json next.config.ts eslint.config.mjs postcss.config.mjs",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"tests/**/*.tsx\" package.json README.md CLAUDE.md .prettierrc components.json tsconfig.json tsconfig.test.json next.config.ts eslint.config.mjs postcss.config.mjs",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.tsx\" package.json README.md CLAUDE.md .prettierrc components.json tsconfig.json tsconfig.test.json next.config.ts eslint.config.mjs postcss.config.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --tsconfig tsconfig.test.json --test tests/*.test.tsx",
+    "test": "tsx --tsconfig tsconfig.test.json --test tests/forms.test.tsx",
     "check-all": "npm run typecheck && npm run lint && npm run format:check && npm test",
     "prepare": "husky"
   },
@@ -45,13 +47,15 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/jsdom": "21.1.7",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.4.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
+    "jsdom": "26.1.0",
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
@@ -62,11 +66,39 @@
     "tsx": "^4.23.15"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "src/**/*.{js,jsx,ts,tsx,css}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,css}": [
+    "tests/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "README.md": [
+      "prettier --write"
+    ],
+    "CLAUDE.md": [
+      "prettier --write"
+    ],
+    ".prettierrc": [
+      "prettier --write"
+    ],
+    "package.json": [
+      "prettier --write"
+    ],
+    "components.json": [
+      "prettier --write"
+    ],
+    "tsconfig*.json": [
+      "prettier --write"
+    ],
+    "next.config.ts": [
+      "prettier --write"
+    ],
+    "eslint.config.mjs": [
+      "prettier --write"
+    ],
+    "postcss.config.mjs": [
       "prettier --write"
     ]
   }

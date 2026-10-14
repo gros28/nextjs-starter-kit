@@ -38,8 +38,7 @@ export function LoginForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (validateForm()) {
-      console.log('로그인 데이터:', formData)
-      // 여기에 로그인 로직을 추가하세요
+      // 예시 폼이며 실제 로그인 기능은 포함되어 있지 않습니다.
     }
   }
 
@@ -56,7 +55,7 @@ export function LoginForm() {
       <CardHeader className="space-y-1">
         <CardTitle className="text-center text-2xl font-bold">로그인</CardTitle>
         <CardDescription className="text-center">
-          계정에 로그인하여 서비스를 이용하세요
+          화면 예시이며 실제 로그인 기능은 포함되어 있지 않습니다.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -66,6 +65,7 @@ export function LoginForm() {
             <Input
               id="email"
               type="email"
+              required
               placeholder="your@email.com"
               value={formData.email}
               onChange={e => handleInputChange('email', e.target.value)}
@@ -86,6 +86,7 @@ export function LoginForm() {
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
+                required
                 placeholder="비밀번호를 입력하세요"
                 value={formData.password}
                 onChange={e => handleInputChange('password', e.target.value)}

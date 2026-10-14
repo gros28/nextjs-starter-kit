@@ -4,8 +4,10 @@ A static App Router starter with reusable layout, marketing sections, Radix-base
 
 ## Requirements
 
-- Node.js 20.9.0 or newer; use a supported LTS release.
-- npm 10 or newer.
+- Node.js 24.11.1 or newer in the 24.x line.
+- npm 11.6.2 or newer in the 11.x line (`packageManager` records npm 11.6.2).
+
+The `packageManager` and `engines` fields document the expected toolchain; they do not install Node.js/npm or guarantee enforcement by every package manager. Use the stated versions for the verified path.
 
 ## Install and run
 
@@ -25,5 +27,7 @@ npm start -- --hostname 127.0.0.1 --port 3000
 ```
 
 `check-all` runs TypeScript, ESLint, Prettier, and the form tests. Bind the production server to loopback for local smoke checks.
+
+`format` and `format:check` cover application source, tests, and the listed root project files. Guide Markdown is excluded because its fenced snippets are illustrative source and Prettier can change their meaning (for example, converting a `'use server'` directive into a parenthesized expression). Hidden tool directories such as `.claude` and `.vscode`, including local tool settings, are also outside this formatter scope. `lint-staged` uses the same source, test, and root-file groups.
 
 See [the Next.js 16 guide](docs/guides/nextjs-16.md) for runtime requirements and migration notes. Other focused notes are in [docs/guides](docs/guides/).
