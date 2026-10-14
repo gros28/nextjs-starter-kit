@@ -29,7 +29,10 @@ test('login validation rejects malformed emails and weak passwords', () => {
   )
 })
 
-test('login form submits through its validator and displays the email error', async () => {
+test('jsdom forms cover valid/error submission, credential silence and checkbox clicks', async t => {
+  const logging = (['log', 'info', 'debug', 'warn'] as const).map(name =>
+    t.mock.method(console, name, () => {})
+  )
   const dom = new JSDOM(
     '<!doctype html><html><body><div id="root"></div></body></html>',
     {
@@ -41,6 +44,8 @@ test('login form submits through its validator and displays the email error', as
     self: (globalThis as typeof globalThis & { self?: Window }).self,
     document: globalThis.document,
     navigator: globalThis.navigator,
+    Event: globalThis.Event,
+    MouseEvent: globalThis.MouseEvent,
     IS_REACT_ACT_ENVIRONMENT: (
       globalThis as typeof globalThis & {
         IS_REACT_ACT_ENVIRONMENT?: boolean
@@ -52,6 +57,8 @@ test('login form submits through its validator and displays the email error', as
     self: { configurable: true, value: dom.window },
     document: { configurable: true, value: dom.window.document },
     navigator: { configurable: true, value: dom.window.navigator },
+    Event: { configurable: true, value: dom.window.Event },
+    MouseEvent: { configurable: true, value: dom.window.MouseEvent },
     IS_REACT_ACT_ENVIRONMENT: { configurable: true, value: true },
   })
 
@@ -91,6 +98,66 @@ test('login form submits through its validator and displays the email error', as
     assert.equal(error?.textContent, '올바른 이메일 주소를 입력해 주세요.')
     assert.equal(email.getAttribute('aria-invalid'), 'true')
     assert.equal(email.getAttribute('aria-describedby'), 'email-error')
+
+    // 입력 갱신과 제출을 분리해 React 상태를 실제 반영한 뒤 분기를 검사한다.
+    const setValue = Object.getOwnPropertyDescriptor(
+      dom.window.HTMLInputElement.prototype,
+      'value'
+    )!.set!
+    const submit = (emailValue: string, passwordValue: string) => {
+      act(() => {
+        setValue.call(email, emailValue)
+        email.dispatchEvent(new dom.window.Event('input', { bubbles: true }))
+        setValue.call(password, passwordValue)
+        password.dispatchEvent(new dom.window.Event('input', { bubbles: true }))
+      })
+      act(() => {
+        form.dispatchEvent(
+          new dom.window.Event('submit', { bubbles: true, cancelable: true })
+        )
+      })
+    }
+    submit('person@example.com', '12345678')
+    assert.equal(dom.window.document.querySelector('#email-error'), null)
+    assert.equal(dom.window.document.querySelector('#password-error'), null)
+    assert.equal(email.getAttribute('aria-invalid'), 'false')
+    assert.equal(password.getAttribute('aria-invalid'), 'false')
+    submit('person@example.com', '        ')
+    assert.equal(
+      dom.window.document.querySelector('#password-error')?.textContent,
+      '비밀번호를 입력해 주세요.'
+    )
+    assert.equal(password.getAttribute('aria-invalid'), 'true')
+    assert.equal(password.getAttribute('aria-describedby'), 'password-error')
+    for (const logger of logging) {
+      for (const call of logger.mock.calls) {
+        assert.equal(JSON.stringify(call.arguments).includes('12345678'), false)
+      }
+    }
+
+    // SSR hidden input 직접 변경이 아니라 렌더된 Radix 버튼 클릭의 동기화를 확인한다.
+    act(() => root.render(<SignupForm />))
+    const signup = dom.window.document.querySelector('form')!
+    for (const [id, value] of [
+      ['name', '홍길동'],
+      ['email', 'person@example.com'],
+      ['password', 'password123'],
+      ['confirmPassword', 'password123'],
+    ]) {
+      dom.window.document.querySelector<HTMLInputElement>(`#${id}`)!.value =
+        value
+    }
+    const visibleTerms = signup.querySelector<HTMLButtonElement>(
+      'button[role="checkbox"]'
+    )!
+    const nativeTerms = signup.querySelector<HTMLInputElement>(
+      'input[type="checkbox"]'
+    )!
+    assert.equal(signup.checkValidity(), false)
+    act(() => visibleTerms.click())
+    assert.equal(visibleTerms.getAttribute('aria-checked'), 'true')
+    assert.equal(nativeTerms.checked, true)
+    assert.equal(signup.checkValidity(), true)
   } finally {
     act(() => root.unmount())
     dom.window.close()
@@ -99,6 +166,8 @@ test('login form submits through its validator and displays the email error', as
       self: { configurable: true, value: previousGlobals.self },
       document: { configurable: true, value: previousGlobals.document },
       navigator: { configurable: true, value: previousGlobals.navigator },
+      Event: { configurable: true, value: previousGlobals.Event },
+      MouseEvent: { configurable: true, value: previousGlobals.MouseEvent },
       IS_REACT_ACT_ENVIRONMENT: {
         configurable: true,
         value: previousGlobals.IS_REACT_ACT_ENVIRONMENT,
