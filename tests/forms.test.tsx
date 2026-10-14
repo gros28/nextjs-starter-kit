@@ -30,9 +30,9 @@ test('login validation rejects malformed emails and weak passwords', () => {
 })
 
 test('jsdom forms cover valid/error submission, credential silence and checkbox clicks', async t => {
-  const logging = (['log', 'info', 'debug', 'warn'] as const).map(name =>
-    t.mock.method(console, name, () => {})
-  )
+  const logging = (
+    ['log', 'info', 'debug', 'warn', 'error', 'dir', 'table', 'trace'] as const
+  ).map(name => t.mock.method(console, name, () => {}))
   const dom = new JSDOM(
     '<!doctype html><html><body><div id="root"></div></body></html>',
     {
@@ -89,6 +89,7 @@ test('jsdom forms cover valid/error submission, credential silence and checkbox 
       email.dispatchEvent(new dom.window.Event('input', { bubbles: true }))
       setValue.call(password, '12345678')
       password.dispatchEvent(new dom.window.Event('input', { bubbles: true }))
+      assert.equal(form.checkValidity(), true)
       form.dispatchEvent(
         new dom.window.Event('submit', { bubbles: true, cancelable: true })
       )
@@ -112,6 +113,7 @@ test('jsdom forms cover valid/error submission, credential silence and checkbox 
         password.dispatchEvent(new dom.window.Event('input', { bubbles: true }))
       })
       act(() => {
+        assert.equal(form.checkValidity(), true)
         form.dispatchEvent(
           new dom.window.Event('submit', { bubbles: true, cancelable: true })
         )
@@ -136,11 +138,6 @@ test('jsdom forms cover valid/error submission, credential silence and checkbox 
     )
     assert.equal(password.getAttribute('aria-invalid'), 'true')
     assert.equal(password.getAttribute('aria-describedby'), 'password-error')
-    for (const logger of logging) {
-      for (const call of logger.mock.calls) {
-        assert.equal(JSON.stringify(call.arguments).includes('12345678'), false)
-      }
-    }
 
     // SSR hidden input 직접 변경이 아니라 렌더된 Radix 버튼 클릭의 동기화를 확인한다.
     act(() => root.render(<SignupForm />))
@@ -165,6 +162,20 @@ test('jsdom forms cover valid/error submission, credential silence and checkbox 
     assert.equal(visibleTerms.getAttribute('aria-checked'), 'true')
     assert.equal(nativeTerms.checked, true)
     assert.equal(signup.checkValidity(), true)
+    act(() =>
+      signup.dispatchEvent(
+        new dom.window.Event('submit', { bubbles: true, cancelable: true })
+      )
+    )
+    for (const logger of logging) {
+      for (const call of logger.mock.calls) {
+        const payload = JSON.stringify(call.arguments)
+        assert.equal(
+          payload.includes('12345678') || payload.includes('password123'),
+          false
+        )
+      }
+    }
   } finally {
     act(() => root.unmount())
     dom.window.close()
