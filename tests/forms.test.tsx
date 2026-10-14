@@ -118,8 +118,15 @@ test('jsdom forms cover valid/error submission, credential silence and checkbox 
       })
     }
     submit('person@example.com', '12345678')
-    assert.equal(dom.window.document.querySelector('#email-error'), null)
-    assert.equal(dom.window.document.querySelector('#password-error'), null)
+    // DOM 객체 전체를 실패 진단에 덤프하면 React 참조가 커지므로 존재 여부만 비교한다.
+    assert.equal(
+      Boolean(dom.window.document.querySelector('#email-error')),
+      false
+    )
+    assert.equal(
+      Boolean(dom.window.document.querySelector('#password-error')),
+      false
+    )
     assert.equal(email.getAttribute('aria-invalid'), 'false')
     assert.equal(password.getAttribute('aria-invalid'), 'false')
     submit('person@example.com', '        ')
