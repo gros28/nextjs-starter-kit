@@ -7,7 +7,7 @@ export function HeroSection() {
       <Container>
         <div className="mx-auto max-w-4xl text-center">
           <Badge variant="secondary" className="mb-6">
-            ✨ Next.js 15 기반 스타터킷
+            ✨ Next.js 16 기반 정적 UI 스타터
           </Badge>
 
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
@@ -16,14 +16,14 @@ export function HeroSection() {
           </h1>
 
           <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg">
-            Next.js 15, TypeScript, TailwindCSS, ShadcnUI로 구축된 프로덕션
-            준비가 완료된 웹 애플리케이션 템플릿입니다. 빠른 개발과 확장성을
-            위해 설계되었습니다.
+            Next.js 16, TypeScript, TailwindCSS, shadcn/ui로 구성한 웹 UI
+            시작점입니다. 기존 섹션과 재사용 컴포넌트를 바탕으로 프로젝트를
+            확장하세요.
           </p>
 
           <div className="mt-12 grid grid-cols-2 gap-4 text-center md:grid-cols-4">
             <div>
-              <div className="text-2xl font-bold">Next.js 15</div>
+              <div className="text-2xl font-bold">Next.js 16</div>
               <div className="text-muted-foreground text-sm">App Router</div>
             </div>
             <div>

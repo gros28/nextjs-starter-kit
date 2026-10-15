@@ -1,17 +1,24 @@
 {
-  "name": "claude-nextjs-starters",
+  "name": "nextjs-starter-kit",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@11.6.2",
+  "engines": {
+    "node": ">=24.11.1 <25",
+    "npm": ">=11.6.2 <12"
+  },
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\" \"tests/**/*.{js,jsx,ts,tsx}\" \"e2e/**/*.ts\" package.json README.md CLAUDE.md .prettierrc components.json playwright.config.ts \"tsconfig*.json\" next.config.ts eslint.config.mjs postcss.config.mjs",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css}\" \"tests/**/*.{js,jsx,ts,tsx}\" \"e2e/**/*.ts\" package.json README.md CLAUDE.md .prettierrc components.json playwright.config.ts \"tsconfig*.json\" next.config.ts eslint.config.mjs postcss.config.mjs",
     "typecheck": "tsc --noEmit",
-    "check-all": "npm run typecheck && npm run lint && npm run format:check",
+    "test": "tsx --tsconfig tsconfig.test.json --test \"tests/**/*.test.{ts,tsx}\"",
+    "test:e2e": "playwright test",
+    "check-all": "npm run typecheck && npm run lint && npm run format:check && npm test",
     "prepare": "husky"
   },
   "dependencies": {
@@ -29,10 +36,10 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.543.0",
-    "next": "15.5.3",
+    "next": "16.4.0",
     "next-themes": "^0.4.6",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "react-hook-form": "^7.63.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
@@ -40,29 +47,68 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.3",
+    "@types/jsdom": "21.1.7",
+    "@playwright/test": "1.64.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
+    "jsdom": "26.1.0",
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "shadcn": "^3.3.1",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.8",
-    "typescript": "^5"
+    "typescript": "^5",
+    "tsx": "^4.23.15"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "src/**/*.{js,jsx,ts,tsx,css}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,css,md}": [
+    "tests/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "e2e/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "README.md": [
+      "prettier --write"
+    ],
+    "CLAUDE.md": [
+      "prettier --write"
+    ],
+    ".prettierrc": [
+      "prettier --write"
+    ],
+    "package.json": [
+      "prettier --write"
+    ],
+    "components.json": [
+      "prettier --write"
+    ],
+    "playwright.config.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "tsconfig*.json": [
+      "prettier --write"
+    ],
+    "next.config.ts": [
+      "prettier --write"
+    ],
+    "eslint.config.mjs": [
+      "prettier --write"
+    ],
+    "postcss.config.mjs": [
       "prettier --write"
     ]
   }

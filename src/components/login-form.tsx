@@ -15,6 +15,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { validateLoginForm } from '@/lib/login-validation'
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -29,20 +30,7 @@ export function LoginForm() {
   })
 
   const validateForm = () => {
-    const newErrors = { email: '', password: '' }
-
-    if (!formData.email) {
-      newErrors.email = '이메일을 입력해 주세요.'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = '올바른 이메일 주소를 입력해 주세요.'
-    }
-
-    if (!formData.password) {
-      newErrors.password = '비밀번호를 입력해 주세요.'
-    } else if (formData.password.length < 8) {
-      newErrors.password = '비밀번호는 최소 8자 이상이어야 합니다.'
-    }
-
+    const newErrors = validateLoginForm(formData.email, formData.password)
     setErrors(newErrors)
     return !newErrors.email && !newErrors.password
   }
@@ -50,8 +38,7 @@ export function LoginForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (validateForm()) {
-      console.log('로그인 데이터:', formData)
-      // 여기에 로그인 로직을 추가하세요
+      // 예시 폼이며 실제 로그인 기능은 포함되어 있지 않습니다.
     }
   }
 
@@ -68,7 +55,7 @@ export function LoginForm() {
       <CardHeader className="space-y-1">
         <CardTitle className="text-center text-2xl font-bold">로그인</CardTitle>
         <CardDescription className="text-center">
-          계정에 로그인하여 서비스를 이용하세요
+          화면 예시이며 실제 로그인 기능은 포함되어 있지 않습니다.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -78,13 +65,18 @@ export function LoginForm() {
             <Input
               id="email"
               type="email"
+              required
               placeholder="your@email.com"
               value={formData.email}
               onChange={e => handleInputChange('email', e.target.value)}
               className={errors.email ? 'border-red-500' : ''}
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? 'email-error' : undefined}
             />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
+              <p id="email-error" className="text-sm text-red-500">
+                {errors.email}
+              </p>
             )}
           </div>
 
@@ -94,16 +86,23 @@ export function LoginForm() {
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
+                required
                 placeholder="비밀번호를 입력하세요"
                 value={formData.password}
                 onChange={e => handleInputChange('password', e.target.value)}
                 className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={
+                  errors.password ? 'password-error' : undefined
+                }
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
                 className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 표시'}
+                aria-pressed={showPassword}
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
@@ -114,7 +113,9 @@ export function LoginForm() {
               </Button>
             </div>
             {errors.password && (
-              <p className="text-sm text-red-500">{errors.password}</p>
+              <p id="password-error" className="text-sm text-red-500">
+                {errors.password}
+              </p>
             )}
           </div>
 
